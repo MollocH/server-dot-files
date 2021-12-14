@@ -50,6 +50,8 @@ zinit load zdharma/history-search-multi-word
 
 bindkey "^[^[[D" backward-word
 bindkey "^[^[[C" forward-word
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
 
 zinit ice from"gh-r" as"program"
 zinit load junegunn/fzf-bin
