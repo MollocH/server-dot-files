@@ -10,6 +10,10 @@ Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
 Plug 'juliosueiras/vim-terraform-completion'
+Plug 'elixir-editors/vim-elixir'
+Plug 'chr4/nginx.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 
 " Initialize plugin system

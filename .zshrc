@@ -160,6 +160,9 @@ if [[ ! -d "/${HOME}/.asdf" ]]; then
 #    asdf install golang 1.13.7
 #    asdf global rust 1.41.0
 #    asdf global golang 1.13.7
+fi
+
+. ${HOME}/.asdf/asdf.sh
 
 if [[ ! -d "/${HOME}/.krew" ]]; then
 (
@@ -173,7 +176,6 @@ if [[ ! -d "/${HOME}/.krew" ]]; then
 )
 fi
 
-fi
 ### Install plug
 if [[ ! -f "/${HOME}/.vim/autoload/plug.vim" ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -245,6 +247,14 @@ zinit snippet OMZ::plugins/git/git.plugin.zsh
 #zinit snippet OMZ::themes/dstufft.zsh-theme
 zinit ice wait lucid
 zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
+
+# include custom configs
+if [[ -d ~/.zshrc-custom/ ]]
+then
+    for file in ~/.zshrc-custom/*; do
+        source "${file}"
+    done
+fi
 
 ## programs
 if [[ "${MACHINE_ARCH}" == "x86_64" ]];then
@@ -345,6 +355,9 @@ if [[ "${MACHINE_ARCH}" == "x86_64" ]];then
   #veeso/termscp
   zinit ice as"command" from"gh-r" bpick"termscp-*-x86_64-unknown-linux-gnu.tar.gz" pick"termscp"
   zinit light veeso/termscp
+  #zellij-org/zellij
+  zinit ice as"command" from"gh-r" bpick"zellij-x86_64-unknown-linux-musl.tar.gz" pick"zellij"
+  zinit light zellij-org/zellij
 elif [[ "${MACHINE_ARCH}" == "aarch64" ]];then
 #  # sharkdp/fd
 #  zinit ice as"command" from"gh-r" mv"fd* -> fd" bpick"*arm-unknown-linux-gnu*" pick"fd/fd"
@@ -408,6 +421,18 @@ if [[ "${MACHINE_ARCH}" == "x86_64" ]] && [[ "${ENV_CONTAINER_DEV}" == "yes" ]];
   zinit light wagoodman/dive
 fi
 
+if [[ "${MACHINE_ARCH}" == "x86_64" ]] && [[ "${ENV_AWS_OPS}" == "yes" ]];then
+  #turbot/steampipe
+  zinit ice as"command" from"gh-r" bpick"steampipe_linux_amd64.tar.gz" pick"steampipe"
+  zinit light turbot/steampipe
+fi
+
+if [[ "${MACHINE_ARCH}" == "x86_64" ]] && [[ "${ENV_ARGO_DEV}" == "yes" ]];then
+  # argoproj/argo-workflows
+  zinit ice as"command" from"gh-r" bpick"*-linux-amd64.gz" mv"argo-linux-amd64 -> argo" pick"argo"
+  zinit light argoproj/argo-workflows
+fi
+
 if [[ "${MACHINE_ARCH}" == "aarch64" ]] && [[ "${ENV_CONTAINER_DEV}" == "yes" ]];then
   # aquasecurity/trivy
   zinit ice as"command" from"gh-r" bpick"trivy_*_Linux-ARM64.tar.gz" pick"trivy"
@@ -423,6 +448,12 @@ if [[ "${MACHINE_ARCH}" == "aarch64" ]] && [[ "${ENV_CONTAINER_DEV}" == "yes" ]]
   zinit light vmware-tanzu/sonobuoy
 fi
 
+if [[ "${MACHINE_ARCH}" == "aarch64" ]] && [[ "${ENV_ARGO_DEV}" == "yes" ]];then
+  # argoproj/argo-workflows
+  zinit ice as"command" from"gh-r" bpick"*-linux-arm64.gz" mv"argo-linux-arm64 -> argo" pick"argo"
+  zinit light argoproj/argo-workflows
+fi
+
 export LS_COLORS="$(vivid generate snazzy)"
 
 
@@ -430,7 +461,6 @@ export LS_COLORS="$(vivid generate snazzy)"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
 autoload -Uz compinit && compinit
-. ${HOME}/.asdf/asdf.sh
 
 zstyle ':completion:*' menu select
 
@@ -449,8 +479,3 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
-
-# include custom configs
-for file in ~/.zshrc-custom/*; do
-    source "${file}"
-done
